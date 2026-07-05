@@ -1,0 +1,37 @@
+import type { BadgeDef } from "@/lib/badges";
+
+export default function BadgeCard({
+  def,
+  unlocked,
+  count,
+}: {
+  def: BadgeDef;
+  unlocked: boolean;
+  count?: number;
+}) {
+  return (
+    <div
+      className={`rounded-xl border p-3 text-center ${
+        unlocked
+          ? "border-gold/40 bg-gold/5"
+          : "border-border bg-surface opacity-60"
+      }`}
+    >
+      <div className={`text-3xl mb-1 ${unlocked ? "" : "grayscale"}`}>
+        {def.icon}
+      </div>
+      <div className="text-sm font-medium">{def.name}</div>
+      <div className="text-[11px] text-muted leading-tight mt-0.5">
+        {def.description}
+      </div>
+      {unlocked && def.perInterest && (count ?? 0) > 1 && (
+        <div className="text-[10px] text-gold mt-1">×{count}</div>
+      )}
+      {!unlocked && (
+        <div className="text-[10px] text-dim mt-1 uppercase tracking-wide">
+          Locked
+        </div>
+      )}
+    </div>
+  );
+}
