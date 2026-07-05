@@ -67,12 +67,19 @@ export default function GlobalTimerBar() {
 
   return (
     <div
-      className="sticky top-0 z-30 border-b border-border bg-surface/95 backdrop-blur"
-      style={{ borderColor: interest ? `${interest.color}55` : undefined }}
+      className="sticky top-0 z-30 border-b bg-bg2/80 backdrop-blur-xl"
+      style={{
+        borderColor: interest ? `${interest.color}66` : undefined,
+        boxShadow: interest ? `0 6px 24px -12px ${interest.color}` : undefined,
+      }}
     >
       <div className="max-w-3xl mx-auto px-4 py-2 flex items-center gap-3">
-        <span className="text-xl" aria-hidden>
+        <span className="relative text-xl" aria-hidden>
           {interest?.icon ?? "⏱️"}
+          <span
+            className="absolute -top-0.5 -right-1 h-2 w-2 rounded-full pulse-ring"
+            style={{ background: interest?.color ?? "var(--accent)" }}
+          />
         </span>
         <div className="min-w-0 flex-1">
           <div className="text-sm font-medium truncate">
@@ -90,7 +97,7 @@ export default function GlobalTimerBar() {
         </div>
         <button
           onClick={handleStop}
-          className="rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-white min-h-[36px]"
+          className="rounded-xl bg-accent-grad px-4 py-1.5 text-sm font-semibold text-white min-h-[36px] shadow-glow"
         >
           Stop
         </button>

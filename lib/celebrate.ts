@@ -1,10 +1,13 @@
 import type { MutationResult } from "./sync";
 import { getBadgeDef } from "./badges";
+import { burst, bigCelebration } from "./confetti";
+import { playSound, haptic } from "./feedback";
 
 export interface CelebrationItem {
   icon: string;
   title: string;
   subtitle: string;
+  tone?: "mini" | "major" | "badge";
 }
 
 export function celebrate(items: CelebrationItem[]): void {
@@ -14,21 +17,50 @@ export function celebrate(items: CelebrationItem[]): void {
   );
 }
 
-// Turn the result of recomputeAfterMutation into celebration toasts.
+export function fireLevelUp(level: number): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(
+    new CustomEvent<number>("ayuta:levelup", { detail: level })
+  );
+  void bigCelebration();
+  playSound("levelup");
+  haptic([18, 40, 18]);
+}
+
+// Turn the result of recomputeAfterMutation into toasts, confetti and sound.
 export function celebrateMutation(result: MutationResult): void {
   const items: CelebrationItem[] = [];
+  let hadMajor = false;
+
   for (const cp of result.newCheckpoints) {
+    const major = cp.kind === "major";
+    hadMajor = hadMajor || major;
     items.push({
-      icon: cp.kind === "major" ? "🏆" : "✨",
+      icon: major ? "🏆" : "✨",
       title: cp.label,
-      subtitle: cp.kind === "major" ? "Major checkpoint reached!" : "Checkpoint reached",
+      subtitle: major ? "Major checkpoint!" : "Checkpoint reached",
+      tone: major ? "major" : "mini",
     });
   }
   for (const b of result.newBadges) {
     const def = getBadgeDef(b.badgeId);
     if (def) {
-      items.push({ icon: def.icon, title: def.name, subtitle: "Badge unlocked!" });
+      if (def.category === "path") hadMajor = true;
+      items.push({
+        icon: def.icon,
+        title: def.name,
+        subtitle: "Badge unlocked!",
+        tone: "badge",
+      });
     }
   }
-  celebrate(items);
+
+  if (items.length > 0) {
+    celebrate(items);
+    playSound(result.newBadges.length ? "badge" : "checkpoint");
+    haptic(hadMajor ? [12, 30, 12] : 14);
+    void (hadMajor ? bigCelebration() : burst());
+  }
+
+  if (result.levelUp) fireLevelUp(result.levelUp);
 }

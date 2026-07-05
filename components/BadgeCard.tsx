@@ -11,10 +11,10 @@ export default function BadgeCard({
 }) {
   return (
     <div
-      className={`rounded-xl border p-3 text-center ${
+      className={`rounded-2xl border p-3 text-center transition-transform hover:-translate-y-0.5 ${
         unlocked
-          ? "border-gold/40 bg-gold/5"
-          : "border-border bg-surface opacity-60"
+          ? "border-gold/40 bg-gold/5 shadow-[0_0_18px_-6px_var(--gold)]"
+          : "glass opacity-55"
       }`}
     >
       <div className={`text-3xl mb-1 ${unlocked ? "" : "grayscale"}`}>

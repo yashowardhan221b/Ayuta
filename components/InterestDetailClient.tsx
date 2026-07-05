@@ -181,7 +181,7 @@ export default function InterestDetailClient({ id }: { id: string }) {
         </Link>
       </div>
 
-      <section className="rounded-2xl border border-border bg-surface p-4">
+      <section className="rounded-2xl glass p-4">
         <CheckpointLadder
           interest={interest}
           entries={entries}

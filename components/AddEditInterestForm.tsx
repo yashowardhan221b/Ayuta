@@ -150,7 +150,7 @@ export default function AddEditInterestForm({
 
       <button
         onClick={submit}
-        className="w-full rounded-lg bg-accent py-3 font-medium text-white min-h-[48px]"
+        className="w-full rounded-xl bg-accent-grad py-3 font-semibold text-white min-h-[48px] shadow-glow active:scale-[0.98] transition-transform"
       >
         {isEdit ? "Save changes" : "Create interest"}
       </button>

@@ -79,6 +79,8 @@ export interface Settings {
   weekStartsOn: 0 | 1; // 0=Sun, 1=Mon
   defaultTargetHours: number;
   dailyGoalMinutes?: number;
+  soundEnabled: boolean;
+  hapticsEnabled: boolean;
 }
 
 // Shape of a full export / import bundle.

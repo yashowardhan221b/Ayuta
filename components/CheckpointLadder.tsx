@@ -42,21 +42,21 @@ export default function CheckpointLadder({
       <ol className="relative border-l border-border ml-2 space-y-3">
         {hours.map((s) => {
           const isNext = next?.id === s.id;
+          const nodeColor = s.kind === "major" ? "var(--major)" : "var(--mini)";
           return (
             <li key={s.id} className="ml-4">
               <span
-                className="absolute -left-[7px] h-3.5 w-3.5 rounded-full border"
+                className={`absolute -left-[7px] h-3.5 w-3.5 rounded-full border ${
+                  isNext ? "pulse-ring" : ""
+                }`}
                 style={{
-                  background: s.reached
-                    ? s.kind === "major"
-                      ? "var(--major)"
-                      : "var(--mini)"
-                    : "var(--bg)",
+                  background: s.reached ? nodeColor : "var(--bg)",
                   borderColor: s.reached
                     ? "transparent"
                     : isNext
                     ? "var(--accent)"
                     : "var(--border)",
+                  boxShadow: s.reached ? `0 0 10px ${nodeColor}` : undefined,
                 }}
               />
               <div className="flex items-center justify-between">

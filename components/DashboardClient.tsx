@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { useLiveData, useHydrated } from "@/lib/hooks";
 import {
   getActiveInterests,
@@ -8,12 +9,12 @@ import {
   getAllInterests,
 } from "@/lib/interests";
 import { getAllEntries } from "@/lib/timeEntries";
-import { polymathSummary, formatHours } from "@/lib/gamification";
+import { polymathSummary } from "@/lib/gamification";
 import { computeStreak, isStreakAtRisk } from "@/lib/streak";
 import { buildInterestSummary } from "@/lib/summary";
 import InterestCard from "./InterestCard";
-import StatTile from "./StatTile";
 import EmptyState from "./EmptyState";
+import AnimatedNumber from "./AnimatedNumber";
 
 export default function DashboardClient() {
   const hydrated = useHydrated();
@@ -25,11 +26,10 @@ export default function DashboardClient() {
   }));
 
   if (!hydrated) {
-    return <div className="h-40 rounded-2xl bg-surface animate-pulse" />;
+    return <div className="h-56 rounded-3xl glass animate-pulse" />;
   }
 
   const { active, all, archivedCount, entries } = data;
-  // Aggregate score counts ALL interests (incl. archived) — cumulative investment.
   const poly = polymathSummary(all, entries);
   const streak = computeStreak(entries);
   const atRisk = isStreakAtRisk(entries);
@@ -60,50 +60,97 @@ export default function DashboardClient() {
       <Header />
 
       {/* Polymath hero */}
-      <section className="rounded-2xl border border-border bg-gradient-to-b from-raised to-surface p-5">
-        <div className="text-xs uppercase tracking-wide text-muted">
-          Polymath Level
-        </div>
-        <div className="flex items-end gap-3">
-          <div className="text-5xl font-bold tabular-nums">{poly.level}</div>
-          <div className="text-sm text-muted mb-1.5">
-            {formatHours(poly.totalHours)} logged all-time
+      <motion.section
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: "spring", stiffness: 200, damping: 22 }}
+        className="relative rounded-3xl glass-raised p-6 overflow-hidden"
+      >
+        <div
+          className="absolute -top-16 -left-10 h-48 w-48 rounded-full blur-3xl opacity-40 pointer-events-none"
+          style={{ background: "var(--accent)" }}
+        />
+        <div
+          className="absolute -bottom-20 -right-10 h-48 w-48 rounded-full blur-3xl opacity-30 pointer-events-none"
+          style={{ background: "var(--accent-2)" }}
+        />
+        <div className="relative">
+          <div className="text-[11px] uppercase tracking-[0.25em] text-accent-2 font-bold">
+            Polymath Level
           </div>
-        </div>
-        <div className="grid grid-cols-3 gap-2 mt-4">
-          <StatTile
-            label="Day streak"
-            value={`🔥 ${streak.currentStreak}`}
-            accent="var(--gold)"
-          />
-          <StatTile label="Paths done" value={poly.pathsCompleted} />
-          <StatTile label="Active pursuits" value={poly.activePursuits} />
-        </div>
-        {atRisk && (
-          <div className="mt-3 text-xs text-gold">
-            🔥 Your {streak.currentStreak}-day streak is alive but you haven&apos;t
-            logged today — a few minutes keeps it going.
+          <div className="flex items-end gap-3 mt-1">
+            <AnimatedNumber
+              value={poly.level}
+              className="text-6xl font-black gradient-text leading-none"
+            />
+            <div className="text-sm text-muted mb-2 tabnums">
+              <AnimatedNumber value={poly.totalHours} decimals={1} suffix="h" />{" "}
+              logged all-time
+            </div>
           </div>
-        )}
-      </section>
+
+          <div className="grid grid-cols-3 gap-2 mt-5">
+            <HeroStat
+              label="Day streak"
+              value={
+                <span className="inline-flex items-center gap-1">
+                  {streak.currentStreak > 0 && <span className="flame">🔥</span>}
+                  <AnimatedNumber value={streak.currentStreak} />
+                </span>
+              }
+              accent="var(--flame-2)"
+            />
+            <HeroStat
+              label="Paths done"
+              value={<AnimatedNumber value={poly.pathsCompleted} />}
+              accent="var(--gold)"
+            />
+            <HeroStat
+              label="Pursuits"
+              value={<AnimatedNumber value={poly.activePursuits} />}
+              accent="var(--accent-2)"
+            />
+          </div>
+
+          {atRisk && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="mt-4 text-xs text-gold flex items-center gap-1.5"
+            >
+              <span className="flame">🔥</span>
+              Your {streak.currentStreak}-day streak is alive — log anything today
+              to keep it.
+            </motion.div>
+          )}
+        </div>
+      </motion.section>
 
       {/* Interests */}
       <section>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-muted">Your pursuits</h2>
-          <Link href="/new" className="text-sm text-accent">
+          <h2 className="text-sm font-bold text-muted uppercase tracking-wide">
+            Your pursuits
+          </h2>
+          <Link href="/new" className="text-sm text-accent-2 font-semibold">
             + Add
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {active.map((interest) => (
-            <InterestCard
+          {active.map((interest, i) => (
+            <motion.div
               key={interest.id}
-              summary={buildInterestSummary(
-                interest,
-                entriesByInterest.get(interest.id) ?? []
-              )}
-            />
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 * i, type: "spring", stiffness: 300, damping: 26 }}
+            >
+              <InterestCard
+                summary={buildInterestSummary(
+                  interest,
+                  entriesByInterest.get(interest.id) ?? []
+                )}
+              />
+            </motion.div>
           ))}
         </div>
         {archivedCount > 0 && (
@@ -119,11 +166,31 @@ export default function DashboardClient() {
   );
 }
 
+function HeroStat({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: React.ReactNode;
+  accent: string;
+}) {
+  return (
+    <div className="rounded-2xl bg-black/20 border border-border px-3 py-2.5 text-center">
+      <div className="text-xl font-black tabnums" style={{ color: accent }}>
+        {value}
+      </div>
+      <div className="text-[11px] text-muted mt-0.5">{label}</div>
+    </div>
+  );
+}
+
 function Header() {
   return (
     <div className="pt-1">
-      <h1 className="text-2xl font-bold tracking-tight md:hidden">
-        Ayuta <span className="text-dim text-base font-normal">अयुत</span>
+      <h1 className="text-2xl font-black tracking-tight md:hidden">
+        <span className="gradient-text">Ayuta</span>{" "}
+        <span className="text-dim text-base font-normal">अयुत</span>
       </h1>
       <p className="text-sm text-muted md:mt-1">
         Every hour counts toward mastery. Keep the deposits visible.

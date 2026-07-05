@@ -4,6 +4,8 @@ import { KEYS, readJSON, writeJSON, notifyDataChanged } from "./storage";
 export const DEFAULT_SETTINGS: Settings = {
   weekStartsOn: 1,
   defaultTargetHours: 10000,
+  soundEnabled: false,
+  hapticsEnabled: true,
 };
 
 export function getSettings(): Settings {

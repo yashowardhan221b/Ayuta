@@ -28,7 +28,7 @@ export default function IdeasPage() {
       {items.map((fw) => (
         <article
           key={fw.key}
-          className="rounded-2xl border border-border bg-surface p-4"
+          className="rounded-2xl glass p-4"
         >
           <h2 className="font-semibold">{fw.title}</h2>
           <div className="text-xs text-dim mb-2">{fw.source}</div>

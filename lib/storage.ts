@@ -9,6 +9,7 @@ export const KEYS = {
   streak: "ayuta_streak",
   badges: "ayuta_badges",
   settings: "ayuta_settings",
+  lastPolyLevel: "ayuta_last_poly_level",
   schemaVersion: "ayuta_schema_version",
 } as const;
 

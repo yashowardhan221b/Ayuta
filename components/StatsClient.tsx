@@ -76,7 +76,7 @@ export default function StatsClient() {
       </div>
 
       {/* Weekly trend */}
-      <section className="rounded-2xl border border-border bg-surface p-4">
+      <section className="rounded-2xl glass p-4">
         <h2 className="text-sm font-semibold text-muted mb-3">
           Last 8 weeks
         </h2>
@@ -97,7 +97,7 @@ export default function StatsClient() {
       </section>
 
       {/* Hours by interest */}
-      <section className="rounded-2xl border border-border bg-surface p-4">
+      <section className="rounded-2xl glass p-4">
         <h2 className="text-sm font-semibold text-muted mb-3">By interest</h2>
         <div className="space-y-2.5">
           {perInterest.map(({ interest, hours }) => (

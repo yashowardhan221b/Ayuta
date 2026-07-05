@@ -11,6 +11,7 @@ import {
 import { deleteEntriesForInterest, getTotalHoursForInterest } from "@/lib/timeEntries";
 import { recomputeAfterMutation } from "@/lib/sync";
 import { formatHours } from "@/lib/gamification";
+import { feedback, haptic } from "@/lib/feedback";
 import ImportExportPanel from "./ImportExportPanel";
 
 export default function SettingsClient() {
@@ -42,7 +43,7 @@ export default function SettingsClient() {
       <ImportExportPanel />
 
       {/* Preferences */}
-      <section className="rounded-2xl border border-border bg-surface p-4 space-y-4">
+      <section className="rounded-2xl glass p-4 space-y-4">
         <h2 className="text-sm font-semibold">Preferences</h2>
         <div className="flex items-center justify-between">
           <span className="text-sm">Week starts on</span>
@@ -65,6 +66,28 @@ export default function SettingsClient() {
             ))}
           </div>
         </div>
+
+        <Toggle
+          label="Sound effects"
+          hint="Subtle blips on wins and level-ups"
+          on={settings.soundEnabled}
+          onToggle={() => {
+            const next = !settings.soundEnabled;
+            updateSettings({ soundEnabled: next });
+            if (next) feedback("levelup", 12);
+            refresh();
+          }}
+        />
+        <Toggle
+          label="Haptics"
+          hint="Vibration on key actions (mobile)"
+          on={settings.hapticsEnabled}
+          onToggle={() => {
+            updateSettings({ hapticsEnabled: !settings.hapticsEnabled });
+            haptic(20);
+            refresh();
+          }}
+        />
       </section>
 
       {/* Archived */}
@@ -116,6 +139,39 @@ export default function SettingsClient() {
         </Link>{" "}
         · अयुत · ten thousand
       </p>
+    </div>
+  );
+}
+
+function Toggle({
+  label,
+  hint,
+  on,
+  onToggle,
+}: {
+  label: string;
+  hint?: string;
+  on: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <div className="flex items-center justify-between">
+      <div>
+        <div className="text-sm">{label}</div>
+        {hint && <div className="text-xs text-dim">{hint}</div>}
+      </div>
+      <button
+        onClick={onToggle}
+        role="switch"
+        aria-checked={on}
+        className="relative h-7 w-12 rounded-full transition-colors shrink-0"
+        style={{ background: on ? "var(--accent)" : "rgba(255,255,255,0.12)" }}
+      >
+        <span
+          className="absolute top-1 h-5 w-5 rounded-full bg-white transition-all"
+          style={{ left: on ? "26px" : "4px" }}
+        />
+      </button>
     </div>
   );
 }

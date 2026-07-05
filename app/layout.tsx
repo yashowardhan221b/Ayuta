@@ -17,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
+        <div className="aurora" aria-hidden />
         <CelebrationHost />
         <div className="flex min-h-screen">
           <Sidebar />

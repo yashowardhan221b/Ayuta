@@ -30,7 +30,7 @@ export default function Modal({
       onClick={onClose}
     >
       <div
-        className="w-full sm:max-w-md bg-surface border border-border rounded-t-2xl sm:rounded-2xl p-5 animate-pop-in max-h-[90vh] overflow-y-auto"
+        className="w-full sm:max-w-md bg-surface-solid border border-border-strong rounded-t-3xl sm:rounded-3xl p-5 animate-pop-in max-h-[90vh] overflow-y-auto shadow-glow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         {title && <h2 className="text-lg font-semibold mb-3">{title}</h2>}
