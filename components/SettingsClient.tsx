@@ -45,6 +45,35 @@ export default function SettingsClient() {
       {/* Preferences */}
       <section className="rounded-2xl glass p-4 space-y-4">
         <h2 className="text-sm font-semibold">Preferences</h2>
+
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm">Daily goal</span>
+            <span className="text-sm text-muted tabnums">
+              {settings.dailyGoalMinutes ?? 30} min
+            </span>
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            {[15, 30, 60, 90].map((m) => (
+              <button
+                key={m}
+                onClick={() => {
+                  updateSettings({ dailyGoalMinutes: m });
+                  haptic(10);
+                  refresh();
+                }}
+                className={`rounded-lg py-2 text-sm font-semibold border ${
+                  (settings.dailyGoalMinutes ?? 30) === m
+                    ? "border-accent bg-accent/15 text-text"
+                    : "border-border text-muted"
+                }`}
+              >
+                {m}m
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="flex items-center justify-between">
           <span className="text-sm">Week starts on</span>
           <div className="flex rounded-lg border border-border overflow-hidden text-sm">

@@ -10,15 +10,21 @@ import PathPicker from "./PathPicker";
 
 export default function AddEditInterestForm({
   interest,
+  initial,
 }: {
   interest?: Interest;
+  initial?: { name?: string; icon?: string; color?: string };
 }) {
   const router = useRouter();
   const isEdit = !!interest;
 
-  const [name, setName] = useState(interest?.name ?? "");
-  const [icon, setIcon] = useState(interest?.icon ?? INTEREST_ICONS[0]);
-  const [color, setColor] = useState(interest?.color ?? INTEREST_COLORS[0]);
+  const [name, setName] = useState(interest?.name ?? initial?.name ?? "");
+  const [icon, setIcon] = useState(
+    interest?.icon ?? initial?.icon ?? INTEREST_ICONS[0]
+  );
+  const [color, setColor] = useState(
+    interest?.color ?? initial?.color ?? INTEREST_COLORS[0]
+  );
   const [category, setCategory] = useState(interest?.category ?? "");
   const [pathId, setPathId] = useState<PathId>("dabble");
   const [customHours, setCustomHours] = useState(50);
@@ -150,7 +156,7 @@ export default function AddEditInterestForm({
 
       <button
         onClick={submit}
-        className="w-full rounded-xl bg-accent-grad py-3 font-semibold text-white min-h-[48px] shadow-glow active:scale-[0.98] transition-transform"
+        className="w-full rounded-full bg-cta-grad py-3.5 font-bold uppercase tracking-wide text-white min-h-[52px] shadow-cta active:translate-y-1 active:shadow-none transition-all"
       >
         {isEdit ? "Save changes" : "Create interest"}
       </button>

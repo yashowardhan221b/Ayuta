@@ -4,6 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import BottomNav from "@/components/BottomNav";
 import GlobalTimerBar from "@/components/GlobalTimerBar";
 import CelebrationHost from "@/components/CelebrationHost";
+import QuickLogFab from "@/components/QuickLogFab";
 
 export const metadata: Metadata = {
   title: "Ayuta — Time to Mastery",
@@ -28,6 +29,7 @@ export default function RootLayout({
             </main>
           </div>
         </div>
+        <QuickLogFab />
         <BottomNav />
       </body>
     </html>

@@ -148,7 +148,7 @@ export default function ManualLogForm({
 
       <button
         onClick={submit}
-        className="w-full rounded-xl bg-accent-grad py-3 font-semibold text-white min-h-[48px] shadow-glow active:scale-[0.98] transition-transform"
+        className="w-full rounded-full bg-cta-grad py-3.5 font-bold uppercase tracking-wide text-white min-h-[52px] shadow-cta active:translate-y-1 active:shadow-none transition-all"
       >
         {savedMsg || "Log time"}
       </button>

@@ -19,6 +19,7 @@ export function exportBundle(): DataBundle {
     streak: readJSON(KEYS.streak, null),
     badges: readJSON(KEYS.badges, []),
     settings: readJSON(KEYS.settings, null),
+    freezes: readJSON(KEYS.freezes, null),
   };
 }
 
@@ -94,6 +95,7 @@ export function applyBundle(bundle: DataBundle, mode: ImportMode): void {
     if (bundle.streak) writeJSON(KEYS.streak, bundle.streak);
     writeJSON(KEYS.badges, bundle.badges);
     if (bundle.settings) writeJSON(KEYS.settings, bundle.settings);
+    if (bundle.freezes) writeJSON(KEYS.freezes, bundle.freezes);
   } else {
     const curInterests = readJSON<{ id: string }[]>(KEYS.interests, []);
     const curEntries = readJSON<{ id: string }[]>(KEYS.entries, []);

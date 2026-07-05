@@ -19,11 +19,13 @@ function shiftDate(dateStr: string, deltaDays: number): string {
 
 // Derive the streak fresh from the data every time. This is robust to backdated
 // manual entries, which would corrupt an incrementally-bumped counter.
+// `frozenDates` are days bridged by a streak freeze — counted as active.
 export function computeStreak(
   entries: TimeEntry[],
-  today: string = getLocalDateString()
+  today: string = getLocalDateString(),
+  frozenDates: string[] = []
 ): StreakState {
-  const activeDays = new Set(entries.map((e) => e.date));
+  const activeDays = new Set([...entries.map((e) => e.date), ...frozenDates]);
 
   // Longest run anywhere in history.
   let longest = 0;
@@ -68,10 +70,33 @@ export function computeStreak(
 // True when there's still a streak to protect but nothing logged today yet.
 export function isStreakAtRisk(
   entries: TimeEntry[],
-  today: string = getLocalDateString()
+  today: string = getLocalDateString(),
+  frozenDates: string[] = []
 ): boolean {
-  const activeDays = new Set(entries.map((e) => e.date));
+  const activeDays = new Set([...entries.map((e) => e.date), ...frozenDates]);
   return !activeDays.has(today) && activeDays.has(shiftDate(today, -1));
+}
+
+export { shiftDate };
+
+// Days fully skipped between the most recent active day and today (exclusive).
+export function missedDaysBeforeToday(
+  entries: TimeEntry[],
+  today: string = getLocalDateString(),
+  frozenDates: string[] = []
+): string[] {
+  const active = new Set([...entries.map((e) => e.date), ...frozenDates]);
+  if (active.size === 0) return [];
+  const past = [...active].filter((d) => d < today).sort();
+  const lastActive = past.pop();
+  if (!lastActive) return [];
+  const missed: string[] = [];
+  let cursor = shiftDate(lastActive, 1);
+  while (cursor < today) {
+    if (!active.has(cursor)) missed.push(cursor);
+    cursor = shiftDate(cursor, 1);
+  }
+  return missed;
 }
 
 // Recompute and cache the streak (cache is convenience only, never source of truth).

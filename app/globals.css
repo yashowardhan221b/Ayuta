@@ -3,32 +3,34 @@
 @tailwind utilities;
 
 :root {
-  /* base */
-  --bg: #06060c;
-  --bg-2: #0b0b16;
-  --surface: rgba(255, 255, 255, 0.035);
-  --surface-solid: #101019;
-  --surface-raised: rgba(255, 255, 255, 0.06);
-  --border: rgba(255, 255, 255, 0.09);
-  --border-strong: rgba(255, 255, 255, 0.16);
+  /* base — bright, playful violet world */
+  --bg: #1b1147;
+  --bg-2: #241a52;
+  --surface: rgba(255, 255, 255, 0.08);
+  --surface-solid: #2a1f5c;
+  --surface-raised: rgba(255, 255, 255, 0.13);
+  --border: rgba(255, 255, 255, 0.15);
+  --border-strong: rgba(255, 255, 255, 0.26);
 
-  --text: #f4f5fb;
-  --text-muted: #9aa0b6;
-  --text-dim: #5a5f77;
+  --text: #fdfcff;
+  --text-muted: #c7c3e6;
+  --text-dim: #938fc0;
 
-  /* neon accents */
-  --accent: #7c5cff; /* indigo-violet */
-  --accent-2: #22d3ee; /* cyan */
-  --magenta: #f65fb8;
+  /* candy accents */
+  --accent: #a855f7; /* bright violet */
+  --accent-2: #38e0d6; /* teal */
+  --magenta: #ff5fb0;
   --lime: #a3e635;
-  --correct: #34d399;
+  --correct: #4ade80;
   --wrong: #fb5a6a;
-  --gold: #fbbf24;
-  --flame-1: #fbbf24;
-  --flame-2: #f97316;
-  --flame-3: #ef4444;
+  --gold: #ffd21e;
+  --flame-1: #ffd21e;
+  --flame-2: #ff9600;
+  --flame-3: #ff4b4b;
   --mini: #38bdf8;
-  --major: #c084fc;
+  --major: #ff5fb0;
+  --cta-1: #58cc02; /* Duolingo-ish playful green */
+  --cta-2: #34d399;
 }
 
 * {
@@ -43,6 +45,14 @@ body {
 
 body {
   background: var(--bg);
+  background-image: radial-gradient(
+      1100px 700px at 12% -8%,
+      rgba(168, 85, 247, 0.6),
+      transparent 58%
+    ),
+    radial-gradient(1000px 800px at 95% 4%, rgba(255, 95, 176, 0.4), transparent 55%),
+    radial-gradient(1100px 900px at 50% 118%, rgba(56, 224, 214, 0.34), transparent 55%);
+  background-attachment: fixed;
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;

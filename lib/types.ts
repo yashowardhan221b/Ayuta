@@ -94,4 +94,5 @@ export interface DataBundle {
   streak: StreakState | null;
   badges: UnlockedBadge[];
   settings: Settings | null;
+  freezes?: unknown;
 }

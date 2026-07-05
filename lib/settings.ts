@@ -6,6 +6,7 @@ export const DEFAULT_SETTINGS: Settings = {
   defaultTargetHours: 10000,
   soundEnabled: false,
   hapticsEnabled: true,
+  dailyGoalMinutes: 30,
 };
 
 export function getSettings(): Settings {

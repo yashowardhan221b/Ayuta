@@ -1,11 +1,12 @@
 import type { UnlockedBadge } from "./types";
 import { getAllInterests, getInterest } from "./interests";
 import { getAllEntries, getEntriesForInterest } from "./timeEntries";
-import { refreshStreakCache } from "./streak";
+import { computeStreak } from "./streak";
 import { evaluateBadges } from "./badges";
 import { collectNewlyReached, type CheckpointStatus } from "./checkpoints";
 import { getSettings } from "./settings";
 import { polymathSummary } from "./gamification";
+import { getFreezeState, earnFreezes } from "./freezes";
 import { KEYS, readJSON, writeJSON } from "./storage";
 
 export interface MutationResult {
@@ -19,7 +20,9 @@ export interface MutationResult {
 export function recomputeAfterMutation(interestId?: string): MutationResult {
   const entries = getAllEntries();
   const interests = getAllInterests();
-  const streak = refreshStreakCache(entries);
+  const streak = computeStreak(entries, undefined, getFreezeState().frozenDates);
+  writeJSON(KEYS.streak, streak);
+  earnFreezes(streak.currentStreak);
   const { weekStartsOn } = getSettings();
 
   const newBadges = evaluateBadges(interests, entries, streak, weekStartsOn);

@@ -10,6 +10,8 @@ export const KEYS = {
   badges: "ayuta_badges",
   settings: "ayuta_settings",
   lastPolyLevel: "ayuta_last_poly_level",
+  freezes: "ayuta_freezes",
+  dailyGoalDate: "ayuta_daily_goal_date",
   schemaVersion: "ayuta_schema_version",
 } as const;
 

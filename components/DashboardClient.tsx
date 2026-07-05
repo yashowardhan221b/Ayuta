@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useLiveData, useHydrated } from "@/lib/hooks";
@@ -10,20 +11,55 @@ import {
 } from "@/lib/interests";
 import { getAllEntries } from "@/lib/timeEntries";
 import { polymathSummary } from "@/lib/gamification";
-import { computeStreak, isStreakAtRisk } from "@/lib/streak";
+import { isStreakAtRisk } from "@/lib/streak";
+import { streakWithFreezes, applyAutoFreeze, getFreezeState } from "@/lib/freezes";
+import { comboTier } from "@/lib/combo";
+import {
+  dailyGoal,
+  shouldCelebrateDailyGoal,
+  markDailyGoalCelebrated,
+} from "@/lib/dailyGoal";
+import { celebrate } from "@/lib/celebrate";
+import { burst } from "@/lib/confetti";
+import { playSound, haptic } from "@/lib/feedback";
 import { buildInterestSummary } from "@/lib/summary";
 import InterestCard from "./InterestCard";
-import EmptyState from "./EmptyState";
 import AnimatedNumber from "./AnimatedNumber";
+import DailyGoalRing from "./DailyGoalRing";
+import OnboardingFlow from "./OnboardingFlow";
 
 export default function DashboardClient() {
   const hydrated = useHydrated();
-  const [data] = useLiveData(() => ({
+  const [data, refresh] = useLiveData(() => ({
     active: getActiveInterests(),
     all: getAllInterests(),
     archivedCount: getArchivedInterests().length,
     entries: getAllEntries(),
   }));
+
+  // On load: auto-bridge missed days with freezes, and fire the daily-goal
+  // celebration once per day when the target is hit.
+  useEffect(() => {
+    if (!hydrated) return;
+    const entries = getAllEntries();
+    const { applied } = applyAutoFreeze(entries);
+    if (applied.length) refresh();
+    if (shouldCelebrateDailyGoal(entries)) {
+      markDailyGoalCelebrated();
+      celebrate([
+        {
+          icon: "🎯",
+          title: "Daily goal complete!",
+          subtitle: "Nice work today",
+          tone: "badge",
+        },
+      ]);
+      void burst(["#58cc02", "#34d399", "#ffd21e"]);
+      playSound("levelup");
+      haptic([12, 30, 12]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated]);
 
   if (!hydrated) {
     return <div className="h-56 rounded-3xl glass animate-pulse" />;
@@ -31,8 +67,11 @@ export default function DashboardClient() {
 
   const { active, all, archivedCount, entries } = data;
   const poly = polymathSummary(all, entries);
-  const streak = computeStreak(entries);
-  const atRisk = isStreakAtRisk(entries);
+  const streak = streakWithFreezes(entries);
+  const atRisk = isStreakAtRisk(entries, undefined, getFreezeState().frozenDates);
+  const combo = comboTier(streak.currentStreak);
+  const freezes = getFreezeState().available;
+  const goal = dailyGoal(entries);
 
   const entriesByInterest = new Map<string, typeof entries>();
   for (const e of entries) {
@@ -41,18 +80,7 @@ export default function DashboardClient() {
   }
 
   if (active.length === 0) {
-    return (
-      <div className="space-y-6">
-        <Header />
-        <EmptyState
-          icon="🌱"
-          title="Start your first pursuit"
-          body="Pick something you want to get better at — an instrument, a language, code, anything. Choose how far you want to take it, and start logging the hours."
-          ctaHref="/new"
-          ctaLabel="+ Add an interest"
-        />
-      </div>
-    );
+    return <OnboardingFlow />;
   }
 
   return (
@@ -89,7 +117,31 @@ export default function DashboardClient() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 mt-5">
+          <div className="flex items-center gap-2 mt-3">
+            {combo.multiplier > 1 && (
+              <span
+                className="text-[11px] font-bold rounded-full px-2.5 py-1"
+                style={{
+                  color: combo.color,
+                  background: "rgba(255,255,255,0.08)",
+                  border: `1px solid ${combo.color}`,
+                }}
+              >
+                {combo.label} · {combo.multiplier}× combo
+              </span>
+            )}
+            {freezes > 0 && (
+              <span
+                className="text-[11px] font-bold rounded-full px-2.5 py-1 text-mini"
+                style={{ background: "rgba(56,189,248,0.12)", border: "1px solid var(--mini)" }}
+                title="Streak freezes protect your streak if you miss a day"
+              >
+                ❄️ {freezes} freeze{freezes > 1 ? "s" : ""}
+              </span>
+            )}
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 mt-4">
             <HeroStat
               label="Day streak"
               value={
@@ -125,6 +177,8 @@ export default function DashboardClient() {
           )}
         </div>
       </motion.section>
+
+      <DailyGoalRing goal={goal} />
 
       {/* Interests */}
       <section>

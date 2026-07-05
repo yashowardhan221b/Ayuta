@@ -120,7 +120,7 @@ export default function ConfirmSessionModal({
         </button>
         <button
           onClick={save}
-          className="flex-1 rounded-xl bg-accent-grad py-2.5 text-sm font-semibold text-white min-h-[44px] shadow-glow active:scale-[0.98] transition-transform"
+          className="flex-1 rounded-full bg-cta-grad py-2.5 text-sm font-bold uppercase tracking-wide text-white min-h-[44px] shadow-cta active:translate-y-1 active:shadow-none transition-all"
         >
           Save session
         </button>
