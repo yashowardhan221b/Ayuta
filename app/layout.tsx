@@ -5,6 +5,7 @@ import BottomNav from "@/components/BottomNav";
 import GlobalTimerBar from "@/components/GlobalTimerBar";
 import CelebrationHost from "@/components/CelebrationHost";
 import QuickLogFab from "@/components/QuickLogFab";
+import EffectsController from "@/components/EffectsController";
 
 export const metadata: Metadata = {
   title: "Ayuta — Time to Mastery",
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         <div className="aurora" aria-hidden />
+        <EffectsController />
         <CelebrationHost />
         <div className="flex min-h-screen">
           <Sidebar />

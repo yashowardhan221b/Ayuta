@@ -117,6 +117,16 @@ export default function SettingsClient() {
             refresh();
           }}
         />
+        <Toggle
+          label="Reduce motion & effects"
+          hint="Turn off drift, particles & heavy glass blur (low-power / accessibility)"
+          on={!!settings.reduceEffects}
+          onToggle={() => {
+            updateSettings({ reduceEffects: !settings.reduceEffects });
+            haptic(10);
+            refresh();
+          }}
+        />
       </section>
 
       {/* Archived */}
@@ -167,6 +177,9 @@ export default function SettingsClient() {
           The ideas behind Ayuta
         </Link>{" "}
         · अयुत · ten thousand
+      </p>
+      <p className="text-[10px] text-dim text-center">
+        Octopus hero photo via Unsplash.
       </p>
     </div>
   );

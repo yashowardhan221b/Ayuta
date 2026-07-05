@@ -31,12 +31,12 @@ const config: Config = {
         cta: "var(--cta-1)",
       },
       boxShadow: {
-        glow: "0 0 20px -2px rgba(168,85,247,0.55)",
-        "glow-lg": "0 0 44px -4px rgba(168,85,247,0.6)",
-        cta: "0 6px 0 -1px #3a8a00, 0 10px 20px -6px rgba(88,204,2,0.5)",
+        glow: "0 0 20px -2px rgba(45,212,191,0.55)",
+        "glow-lg": "0 0 44px -4px rgba(45,212,191,0.6)",
+        cta: "0 6px 0 -1px #12634a, 0 10px 22px -6px rgba(47,211,154,0.5)",
       },
       backgroundImage: {
-        "accent-grad": "linear-gradient(100deg, var(--accent), var(--magenta))",
+        "accent-grad": "linear-gradient(100deg, var(--accent), var(--accent-2))",
         "cta-grad": "linear-gradient(100deg, var(--cta-1), var(--cta-2))",
         "flame-grad":
           "linear-gradient(180deg, var(--flame-1), var(--flame-2), var(--flame-3))",

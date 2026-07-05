@@ -24,9 +24,8 @@ import { burst } from "@/lib/confetti";
 import { playSound, haptic } from "@/lib/feedback";
 import { buildInterestSummary } from "@/lib/summary";
 import InterestCard from "./InterestCard";
-import AnimatedNumber from "./AnimatedNumber";
-import DailyGoalRing from "./DailyGoalRing";
 import OnboardingFlow from "./OnboardingFlow";
+import OctopusHero from "./OctopusHero";
 
 export default function DashboardClient() {
   const hydrated = useHydrated();
@@ -84,109 +83,29 @@ export default function DashboardClient() {
   }
 
   return (
-    <div className="space-y-6">
-      <Header />
-
-      {/* Polymath hero */}
-      <motion.section
-        initial={{ opacity: 0, scale: 0.97 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ type: "spring", stiffness: 200, damping: 22 }}
-        className="relative rounded-3xl glass-raised p-6 overflow-hidden"
-      >
-        <div
-          className="absolute -top-16 -left-10 h-48 w-48 rounded-full blur-3xl opacity-40 pointer-events-none"
-          style={{ background: "var(--accent)" }}
-        />
-        <div
-          className="absolute -bottom-20 -right-10 h-48 w-48 rounded-full blur-3xl opacity-30 pointer-events-none"
-          style={{ background: "var(--accent-2)" }}
-        />
-        <div className="relative">
-          <div className="text-[11px] uppercase tracking-[0.25em] text-accent-2 font-bold">
-            Polymath Level
-          </div>
-          <div className="flex items-end gap-3 mt-1">
-            <AnimatedNumber
-              value={poly.level}
-              className="text-6xl font-black gradient-text leading-none"
-            />
-            <div className="text-sm text-muted mb-2 tabnums">
-              <AnimatedNumber value={poly.totalHours} decimals={1} suffix="h" />{" "}
-              logged all-time
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 mt-3">
-            {combo.multiplier > 1 && (
-              <span
-                className="text-[11px] font-bold rounded-full px-2.5 py-1"
-                style={{
-                  color: combo.color,
-                  background: "rgba(255,255,255,0.08)",
-                  border: `1px solid ${combo.color}`,
-                }}
-              >
-                {combo.label} · {combo.multiplier}× combo
-              </span>
-            )}
-            {freezes > 0 && (
-              <span
-                className="text-[11px] font-bold rounded-full px-2.5 py-1 text-mini"
-                style={{ background: "rgba(56,189,248,0.12)", border: "1px solid var(--mini)" }}
-                title="Streak freezes protect your streak if you miss a day"
-              >
-                ❄️ {freezes} freeze{freezes > 1 ? "s" : ""}
-              </span>
-            )}
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 mt-4">
-            <HeroStat
-              label="Day streak"
-              value={
-                <span className="inline-flex items-center gap-1">
-                  {streak.currentStreak > 0 && <span className="flame">🔥</span>}
-                  <AnimatedNumber value={streak.currentStreak} />
-                </span>
-              }
-              accent="var(--flame-2)"
-            />
-            <HeroStat
-              label="Paths done"
-              value={<AnimatedNumber value={poly.pathsCompleted} />}
-              accent="var(--gold)"
-            />
-            <HeroStat
-              label="Pursuits"
-              value={<AnimatedNumber value={poly.activePursuits} />}
-              accent="var(--accent-2)"
-            />
-          </div>
-
-          {atRisk && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mt-4 text-xs text-gold flex items-center gap-1.5"
-            >
-              <span className="flame">🔥</span>
-              Your {streak.currentStreak}-day streak is alive — log anything today
-              to keep it.
-            </motion.div>
-          )}
-        </div>
-      </motion.section>
-
-      <DailyGoalRing goal={goal} />
+    <div className="space-y-5">
+      <OctopusHero
+        level={poly.level}
+        totalHours={poly.totalHours}
+        streakDays={streak.currentStreak}
+        atRisk={atRisk}
+        combo={combo}
+        freezes={freezes}
+        goal={goal}
+      />
 
       {/* Interests */}
       <section>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-bold text-muted uppercase tracking-wide">
-            Your pursuits
-          </h2>
-          <Link href="/new" className="text-sm text-accent-2 font-semibold">
+          <div>
+            <h2 className="text-sm font-bold text-muted uppercase tracking-wide">
+              Your pursuits
+            </h2>
+            <p className="text-[11px] text-dim mt-0.5">
+              {poly.activePursuits} active · {poly.pathsCompleted} paths complete
+            </p>
+          </div>
+          <Link href="/new" className="text-sm text-accent font-semibold">
             + Add
           </Link>
         </div>
@@ -220,35 +139,3 @@ export default function DashboardClient() {
   );
 }
 
-function HeroStat({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: React.ReactNode;
-  accent: string;
-}) {
-  return (
-    <div className="rounded-2xl bg-black/20 border border-border px-3 py-2.5 text-center">
-      <div className="text-xl font-black tabnums" style={{ color: accent }}>
-        {value}
-      </div>
-      <div className="text-[11px] text-muted mt-0.5">{label}</div>
-    </div>
-  );
-}
-
-function Header() {
-  return (
-    <div className="pt-1">
-      <h1 className="text-2xl font-black tracking-tight md:hidden">
-        <span className="gradient-text">Ayuta</span>{" "}
-        <span className="text-dim text-base font-normal">अयुत</span>
-      </h1>
-      <p className="text-sm text-muted md:mt-1">
-        Every hour counts toward mastery. Keep the deposits visible.
-      </p>
-    </div>
-  );
-}

@@ -7,6 +7,7 @@ export const DEFAULT_SETTINGS: Settings = {
   soundEnabled: false,
   hapticsEnabled: true,
   dailyGoalMinutes: 30,
+  reduceEffects: false,
 };
 
 export function getSettings(): Settings {

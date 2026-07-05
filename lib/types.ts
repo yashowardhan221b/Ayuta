@@ -81,6 +81,7 @@ export interface Settings {
   dailyGoalMinutes?: number;
   soundEnabled: boolean;
   hapticsEnabled: boolean;
+  reduceEffects?: boolean;
 }
 
 // Shape of a full export / import bundle.
