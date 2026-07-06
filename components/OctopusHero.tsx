@@ -63,7 +63,10 @@ export default function OctopusHero({
           alt="A deep-sea octopus — emblem of the polymath: one mind, many crafts."
           onError={() => setHasImage(false)}
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ animation: "kenburns 26s ease-in-out infinite alternate" }}
+          style={{
+            objectPosition: "50% 22%", // keep the head and eyes in frame
+            animation: "kenburns 26s ease-in-out infinite alternate",
+          }}
         />
       )}
 

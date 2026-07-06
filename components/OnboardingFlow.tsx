@@ -46,20 +46,35 @@ export default function OnboardingFlow() {
             className="text-center space-y-5"
           >
             <motion.div
-              initial={{ scale: 0.6, rotate: -12 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "spring", stiffness: 200, damping: 12 }}
-              className="text-7xl"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 160, damping: 16 }}
+              className="relative mx-auto h-48 w-48 rounded-full overflow-hidden"
+              style={{ boxShadow: "0 0 60px -10px rgba(157,123,255,0.55)" }}
             >
-              🏔️
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/octopus-welcome.webp"
+                alt="A translucent glass octopus — one mind, many arms."
+                className="h-full w-full object-cover"
+                style={{ objectPosition: "50% 30%" }}
+              />
+              <div
+                className="absolute inset-0 rounded-full"
+                style={{
+                  boxShadow: "inset 0 0 40px rgba(4,20,26,0.8)",
+                  border: "1px solid rgba(165,238,255,0.25)",
+                }}
+              />
             </motion.div>
             <div>
               <h1 className="text-3xl font-black">
                 Welcome to <span className="gradient-text">Ayuta</span>
               </h1>
               <p className="text-muted mt-2 max-w-sm mx-auto">
-                Pick the things you want to get good at. Log your hours. Watch
-                yourself climb from Novice to Expert — one checkpoint at a time.
+                An octopus keeps two-thirds of its neurons in its arms — each arm
+                learns its own craft. Pick yours, log the hours, and climb from
+                Novice to Expert one checkpoint at a time.
               </p>
             </div>
             <div className="flex flex-col items-center gap-2 text-sm text-muted">
