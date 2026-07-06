@@ -3,34 +3,35 @@
 @tailwind utilities;
 
 :root {
-  /* base — abyssal deep sea */
-  --bg: #04141a;
-  --bg-2: #08222b;
-  --surface: rgba(130, 205, 215, 0.07);
-  --surface-solid: #0b2530;
-  --surface-raised: rgba(150, 220, 230, 0.12);
-  --border: rgba(150, 220, 235, 0.16);
-  --border-strong: rgba(165, 238, 255, 0.3);
+  /* base — luminous monarch garden (warm twilight) */
+  --bg: #161a2e;
+  --bg-2: #201436;
+  /* smoked glass: dark warm tint so panels read on the brighter ground */
+  --surface: rgba(24, 16, 34, 0.46);
+  --surface-solid: #1c1730;
+  --surface-raised: rgba(26, 18, 38, 0.58);
+  --border: rgba(255, 221, 186, 0.2);
+  --border-strong: rgba(255, 226, 192, 0.34);
 
-  --text: #eaf6f7;
-  --text-muted: #91b4ba;
-  --text-dim: #587278;
+  --text: #fdf6ee;
+  --text-muted: #cbbccb;
+  --text-dim: #8b7f93;
 
-  /* bioluminescence */
-  --accent: #2dd4bf; /* cyan-teal */
-  --accent-2: #9d7bff; /* deep-sea violet */
-  --magenta: #ff6fae;
-  --lime: #7fe081;
-  --correct: #43e0a0;
+  /* monarch accents */
+  --accent: #f97316; /* monarch orange */
+  --accent-2: #fbbf24; /* gold */
+  --magenta: #ec4899;
+  --lime: #34d399;
+  --correct: #34d399;
   --wrong: #fb6a6a;
-  --gold: #ffcf5c;
-  --flame-1: #ffd27e;
-  --flame-2: #ff9e5c;
-  --flame-3: #ff6b6b;
-  --mini: #38bdf8;
-  --major: #b48bff;
-  --cta-1: #2fd39a; /* bioluminescent green */
-  --cta-2: #38e0c8;
+  --gold: #fbbf24;
+  --flame-1: #fbbf24;
+  --flame-2: #fb923c;
+  --flame-3: #ef4444;
+  --mini: #22d3ee;
+  --major: #8b5cf6;
+  --cta-1: #34d399; /* leaf green */
+  --cta-2: #10b981;
 }
 
 * {
@@ -46,12 +47,13 @@ body {
 body {
   background: var(--bg);
   background-image: radial-gradient(
-      1100px 720px at 15% -10%,
-      rgba(45, 212, 191, 0.22),
-      transparent 60%
+      1200px 800px at 18% -6%,
+      rgba(251, 146, 60, 0.28),
+      transparent 55%
     ),
-    radial-gradient(1000px 820px at 92% 2%, rgba(157, 123, 255, 0.2), transparent 58%),
-    radial-gradient(1200px 900px at 50% 120%, rgba(20, 90, 110, 0.55), transparent 60%);
+    radial-gradient(1000px 800px at 92% 6%, rgba(236, 72, 153, 0.22), transparent 55%),
+    radial-gradient(1100px 900px at 50% 122%, rgba(52, 211, 153, 0.2), transparent 55%),
+    linear-gradient(180deg, #241326, #161a2e 60%, #0e1524);
   background-attachment: fixed;
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
@@ -220,13 +222,13 @@ body.reduce-fx .glass-raised {
 
 @keyframes pulse-ring {
   0% {
-    box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.5);
+    box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.5);
   }
   70% {
-    box-shadow: 0 0 0 10px rgba(45, 212, 191, 0);
+    box-shadow: 0 0 0 10px rgba(249, 115, 22, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(45, 212, 191, 0);
+    box-shadow: 0 0 0 0 rgba(249, 115, 22, 0);
   }
 }
 .pulse-ring {

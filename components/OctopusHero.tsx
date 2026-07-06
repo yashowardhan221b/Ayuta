@@ -28,56 +28,40 @@ export default function OctopusHero({
 
   return (
     <section className="relative rounded-3xl overflow-hidden h-[46vh] min-h-[320px] max-h-[440px]">
-      {/* deep-sea fallback scene (always behind; shows if no photo) */}
-      <div className="absolute inset-0 bg-bg2">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(120% 90% at 50% 8%, rgba(45,212,191,0.16), transparent 55%)," +
-              "radial-gradient(90% 70% at 50% 60%, rgba(157,123,255,0.28), transparent 60%)," +
-              "radial-gradient(140% 120% at 50% 130%, #041016, transparent 60%)",
-          }}
-        />
-        {/* a lurking bioluminescent presence */}
-        <div
-          className="absolute left-1/2 top-[46%] h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl opacity-60"
-          style={{ background: "radial-gradient(circle, #6d54c9, transparent 70%)" }}
-        />
-        {/* caustic rays */}
-        <div
-          className="absolute inset-0 opacity-[0.08]"
-          style={{
-            background:
-              "repeating-linear-gradient(105deg, transparent 0 60px, rgba(190,240,255,0.9) 60px 64px)",
-            maskImage: "linear-gradient(to bottom, black, transparent 75%)",
-          }}
-        />
-      </div>
+      {/* warm garden fallback (behind; shows if photo missing) */}
+      <div
+        className="absolute inset-0 bg-bg2"
+        style={{
+          background:
+            "radial-gradient(120% 90% at 30% 0%, rgba(251,146,60,0.35), transparent 55%)," +
+            "radial-gradient(100% 80% at 90% 10%, rgba(236,72,153,0.28), transparent 55%)," +
+            "linear-gradient(180deg,#2a1636,#161a2e)",
+        }}
+      />
 
-      {/* the real octopus photo (drop-in at /public/octopus-hero.webp) */}
+      {/* the monarch migration photo */}
       {hasImage && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src="/octopus-hero.webp"
-          alt="A deep-sea octopus — emblem of the polymath: one mind, many crafts."
+          src="/monarch-sky.webp"
+          alt="A sky full of migrating monarch butterflies — one life, many wings."
           onError={() => setHasImage(false)}
           className="absolute inset-0 h-full w-full object-cover"
           style={{
-            objectPosition: "50% 22%", // keep the head and eyes in frame
-            animation: "kenburns 26s ease-in-out infinite alternate",
+            objectPosition: "50% 38%",
+            animation: "kenburns 30s ease-in-out infinite alternate",
           }}
         />
       )}
 
-      {/* grade stack: tint + vignette + melt into the page bg */}
+      {/* grade: warm sheen + gentle vignette + melt bottom into the page bg */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(160deg, rgba(45,212,191,0.14), transparent 45%)," +
-            "radial-gradient(120% 100% at 50% 20%, transparent 55%, rgba(4,20,26,0.55))," +
-            "linear-gradient(to bottom, transparent 28%, rgba(4,20,26,0.6) 72%, var(--bg) 100%)",
+            "linear-gradient(160deg, rgba(251,191,36,0.10), transparent 42%)," +
+            "radial-gradient(120% 100% at 50% 18%, transparent 60%, rgba(20,12,26,0.4))," +
+            "linear-gradient(to bottom, transparent 30%, rgba(20,16,40,0.5) 74%, var(--bg) 100%)",
         }}
       />
 
@@ -109,7 +93,7 @@ export default function OctopusHero({
         <div className="flex items-center gap-4">
           <div className="min-w-0 flex-1">
             <div className="text-[10px] uppercase tracking-[0.24em] text-accent font-bold">
-              One mind · many crafts
+              One life · many wings
             </div>
             <div className="flex items-end gap-2 mt-0.5">
               <AnimatedNumber

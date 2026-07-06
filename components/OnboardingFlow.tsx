@@ -54,10 +54,9 @@ export default function OnboardingFlow() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/octopus-welcome.webp"
-                alt="A translucent glass octopus — one mind, many arms."
-                className="h-full w-full object-cover"
-                style={{ objectPosition: "50% 30%" }}
+                src="/monarch-1.webp"
+                alt="A monarch butterfly — a life of becoming."
+                className="h-full w-full object-contain p-3"
               />
               <div
                 className="absolute inset-0 rounded-full"
@@ -72,9 +71,9 @@ export default function OnboardingFlow() {
                 Welcome to <span className="gradient-text">Ayuta</span>
               </h1>
               <p className="text-muted mt-2 max-w-sm mx-auto">
-                An octopus keeps two-thirds of its neurons in its arms — each arm
-                learns its own craft. Pick yours, log the hours, and climb from
-                Novice to Expert one checkpoint at a time.
+                A monarch spends its whole life becoming — and migrates thousands
+                of miles across generations. Pick what you&apos;re becoming, log the
+                hours, and watch the distance add up.
               </p>
             </div>
             <div className="flex flex-col items-center gap-2 text-sm text-muted">
