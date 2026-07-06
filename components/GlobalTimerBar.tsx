@@ -2,7 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useHydrated, useLiveData } from "@/lib/hooks";
-import { getActiveTimer, stopTimer, cancelTimer, elapsedMinutes } from "@/lib/timer";
+import {
+  getActiveTimer,
+  stopTimer,
+  cancelTimer,
+  pauseTimer,
+  resumeTimer,
+  isPaused,
+  elapsedMs,
+} from "@/lib/timer";
+import { feedback } from "@/lib/feedback";
 import { getInterest } from "@/lib/interests";
 import ConfirmSessionModal, { type PendingSession } from "./ConfirmSessionModal";
 
@@ -36,13 +45,21 @@ export default function GlobalTimerBar() {
   }
 
   const interest = getInterest(timer.interestId);
-  const mins = elapsedMinutes(timer, now);
-  const secs = Math.floor(((now - new Date(timer.startedAt).getTime()) / 1000) % 60);
-  const hh = Math.floor(mins / 60);
-  const mm = Math.floor(mins % 60);
+  const paused = isPaused(timer);
+  const totalSec = Math.floor(elapsedMs(timer, now) / 1000);
+  const hh = Math.floor(totalSec / 3600);
+  const mm = Math.floor((totalSec % 3600) / 60);
+  const ss = totalSec % 60;
   const clock = `${hh > 0 ? `${hh}:` : ""}${String(mm).padStart(hh > 0 ? 2 : 1, "0")}:${String(
-    secs
+    ss
   ).padStart(2, "0")}`;
+
+  const togglePause = () => {
+    if (paused) resumeTimer();
+    else pauseTimer();
+    feedback("tap", 10);
+    refresh();
+  };
 
   const handleStop = () => {
     const stopped = stopTimer();
@@ -77,7 +94,9 @@ export default function GlobalTimerBar() {
         <span className="relative text-xl" aria-hidden>
           {interest?.icon ?? "⏱️"}
           <span
-            className="absolute -top-0.5 -right-1 h-2 w-2 rounded-full pulse-ring"
+            className={`absolute -top-0.5 -right-1 h-2 w-2 rounded-full ${
+              paused ? "opacity-40" : "pulse-ring"
+            }`}
             style={{ background: interest?.color ?? "var(--accent)" }}
           />
         </span>
@@ -86,18 +105,30 @@ export default function GlobalTimerBar() {
             {interest?.name ?? "Timing…"}
           </div>
           <div className="text-xs text-muted">
-            {timer.deliberate ? "Deliberate practice" : "In session"}
+            {paused
+              ? "Paused"
+              : timer.deliberate
+              ? "Deliberate practice"
+              : "In session"}
           </div>
         </div>
         <div
           className="font-mono text-lg tabular-nums"
-          style={{ color: interest?.color }}
+          style={{ color: paused ? "var(--text-muted)" : interest?.color }}
         >
           {clock}
         </div>
         <button
+          onClick={togglePause}
+          className="rounded-lg border border-border-strong px-3 py-1.5 text-sm font-semibold min-h-[36px]"
+          style={{ color: interest?.color }}
+          title={paused ? "Resume" : "Pause"}
+        >
+          {paused ? "▶" : "❚❚"}
+        </button>
+        <button
           onClick={handleStop}
-          className="rounded-xl bg-accent-grad px-4 py-1.5 text-sm font-semibold text-white min-h-[36px] shadow-glow"
+          className="rounded-xl bg-cta-grad px-4 py-1.5 text-sm font-semibold text-white min-h-[36px] shadow-glow"
         >
           Stop
         </button>

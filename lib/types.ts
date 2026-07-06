@@ -58,7 +58,9 @@ export interface CheckpointOverride {
 
 export interface ActiveTimer {
   interestId: string;
-  startedAt: string; // ISO — the only state that must survive refresh
+  startedAt: string; // ISO — original start (recorded on the entry)
+  runningSince: string | null; // ISO — when the current run began; null = paused
+  accumulatedMs: number; // elapsed time banked before the current run
   note?: string;
   deliberate?: boolean;
 }

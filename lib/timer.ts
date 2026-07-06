@@ -1,8 +1,24 @@
 import type { ActiveTimer } from "./types";
 import { KEYS, readJSON, writeJSON, removeKey, notifyDataChanged } from "./storage";
 
+// Normalise older timer records (pre pause/resume) to the current shape.
+function normalize(raw: ActiveTimer | null): ActiveTimer | null {
+  if (!raw) return null;
+  if (typeof raw.accumulatedMs === "number" && raw.runningSince !== undefined) {
+    return raw;
+  }
+  return {
+    interestId: raw.interestId,
+    startedAt: raw.startedAt,
+    runningSince: raw.startedAt, // treat legacy timer as running since its start
+    accumulatedMs: 0,
+    note: raw.note,
+    deliberate: raw.deliberate,
+  };
+}
+
 export function getActiveTimer(): ActiveTimer | null {
-  return readJSON<ActiveTimer | null>(KEYS.activeTimer, null);
+  return normalize(readJSON<ActiveTimer | null>(KEYS.activeTimer, null));
 }
 
 export interface StartTimerOpts {
@@ -11,9 +27,12 @@ export interface StartTimerOpts {
 }
 
 export function startTimer(interestId: string, opts: StartTimerOpts = {}): ActiveTimer {
+  const nowISO = new Date().toISOString();
   const timer: ActiveTimer = {
     interestId,
-    startedAt: new Date().toISOString(),
+    startedAt: nowISO,
+    runningSince: nowISO,
+    accumulatedMs: 0,
     note: opts.note,
     deliberate: opts.deliberate,
   };
@@ -22,11 +41,41 @@ export function startTimer(interestId: string, opts: StartTimerOpts = {}): Activ
   return timer;
 }
 
-// Elapsed minutes computed purely from the persisted anchor timestamp — correct
-// after any refresh or tab close/reopen, since no interval state is stored.
+export function isPaused(timer: ActiveTimer): boolean {
+  return timer.runningSince === null;
+}
+
+// Elapsed ms from banked time + the current run — correct after any refresh,
+// since only timestamps are persisted (no interval state).
+export function elapsedMs(timer: ActiveTimer, now: number = Date.now()): number {
+  const running = timer.runningSince ? now - new Date(timer.runningSince).getTime() : 0;
+  return Math.max(0, timer.accumulatedMs + Math.max(0, running));
+}
+
 export function elapsedMinutes(timer: ActiveTimer, now: number = Date.now()): number {
-  const start = new Date(timer.startedAt).getTime();
-  return Math.max(0, (now - start) / 60000);
+  return elapsedMs(timer, now) / 60000;
+}
+
+export function pauseTimer(): void {
+  const timer = getActiveTimer();
+  if (!timer || timer.runningSince === null) return;
+  const banked = elapsedMs(timer);
+  writeJSON(KEYS.activeTimer, {
+    ...timer,
+    accumulatedMs: banked,
+    runningSince: null,
+  });
+  notifyDataChanged();
+}
+
+export function resumeTimer(): void {
+  const timer = getActiveTimer();
+  if (!timer || timer.runningSince !== null) return;
+  writeJSON(KEYS.activeTimer, {
+    ...timer,
+    runningSince: new Date().toISOString(),
+  });
+  notifyDataChanged();
 }
 
 export interface StoppedTimer {
