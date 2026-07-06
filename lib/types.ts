@@ -84,6 +84,7 @@ export interface Settings {
   soundEnabled: boolean;
   hapticsEnabled: boolean;
   reduceEffects?: boolean;
+  displayName?: string;
 }
 
 // Shape of a full export / import bundle.
