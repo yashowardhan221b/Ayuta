@@ -12,6 +12,7 @@ import type { Interest, TimeEntry } from "@/lib/types";
 import AnimatedNumber from "./AnimatedNumber";
 import StatTile from "./StatTile";
 import EmptyState from "./EmptyState";
+import { PursuitIcon } from "./icons";
 
 export default function LifePortfolioClient() {
   const hydrated = useHydrated();
@@ -92,8 +93,8 @@ export default function LifePortfolioClient() {
                   className="h-2.5 w-2.5 rounded-full shrink-0"
                   style={{ background: interest.color }}
                 />
-                <span className="truncate flex-1">
-                  {interest.icon} {interest.name}
+                <span className="truncate flex-1 inline-flex items-center gap-1.5">
+                  <PursuitIcon icon={interest.icon} size={16} /> {interest.name}
                 </span>
                 <span className="text-muted tabnums">
                   {Math.round((hours / totalH) * 100)}%
@@ -127,10 +128,10 @@ export default function LifePortfolioClient() {
                 className="flex items-center gap-3"
               >
                 <div
-                  className="h-10 w-10 rounded-xl grid place-items-center text-lg shrink-0"
+                  className="h-10 w-10 rounded-xl grid place-items-center shrink-0"
                   style={{ background: withAlpha(interest.color, 0.18) }}
                 >
-                  {interest.icon}
+                  <PursuitIcon icon={interest.icon} size={22} />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-semibold truncate">

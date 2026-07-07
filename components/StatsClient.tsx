@@ -7,6 +7,7 @@ import { computeStreak, getLocalDateString, distinctActiveDays } from "@/lib/str
 import { formatHours, polymathSummary } from "@/lib/gamification";
 import StatTile from "./StatTile";
 import EmptyState from "./EmptyState";
+import { PursuitIcon } from "./icons";
 
 export default function StatsClient() {
   const hydrated = useHydrated();
@@ -103,8 +104,8 @@ export default function StatsClient() {
           {perInterest.map(({ interest, hours }) => (
             <div key={interest.id}>
               <div className="flex items-center justify-between text-xs mb-1">
-                <span className="truncate">
-                  {interest.icon} {interest.name}
+                <span className="truncate inline-flex items-center gap-1.5">
+                  <PursuitIcon icon={interest.icon} size={15} /> {interest.name}
                   {interest.archivedAt && (
                     <span className="text-dim"> · archived</span>
                   )}

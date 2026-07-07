@@ -14,6 +14,7 @@ import {
 import { feedback } from "@/lib/feedback";
 import { getInterest } from "@/lib/interests";
 import ConfirmSessionModal, { type PendingSession } from "./ConfirmSessionModal";
+import { PursuitIcon } from "./icons";
 
 export default function GlobalTimerBar() {
   const hydrated = useHydrated();
@@ -91,8 +92,8 @@ export default function GlobalTimerBar() {
       }}
     >
       <div className="max-w-3xl mx-auto px-4 py-2 flex items-center gap-3">
-        <span className="relative text-xl" aria-hidden>
-          {interest?.icon ?? "⏱️"}
+        <span className="relative inline-flex" aria-hidden>
+          {interest ? <PursuitIcon icon={interest.icon} size={22} /> : "⏱️"}
           <span
             className={`absolute -top-0.5 -right-1 h-2 w-2 rounded-full ${
               paused ? "opacity-40" : "pulse-ring"

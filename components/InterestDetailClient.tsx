@@ -27,6 +27,7 @@ import CalendarHeatmap from "./CalendarHeatmap";
 import SessionLogList from "./SessionLogList";
 import StartTimerButton from "./StartTimerButton";
 import PromotePathModal from "./PromotePathModal";
+import { PursuitIcon } from "./icons";
 
 // In-memory guard so the auto promote-prompt fires at most once per session.
 const autoPrompted = new Set<string>();
@@ -131,7 +132,7 @@ export default function InterestDetailClient({ id }: { id: string }) {
       {/* Hero */}
       <section className="flex items-center gap-5">
         <MasteryRing pct={mastery} size={120} stroke={10} color={interest.color}>
-          <div className="text-2xl">{interest.icon}</div>
+          <PursuitIcon icon={interest.icon} size={28} />
           <div className="text-sm font-semibold">{mastery}%</div>
         </MasteryRing>
         <div className="min-w-0 flex-1">

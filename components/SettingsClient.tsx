@@ -13,6 +13,7 @@ import { recomputeAfterMutation } from "@/lib/sync";
 import { formatHours } from "@/lib/gamification";
 import { feedback, haptic } from "@/lib/feedback";
 import ImportExportPanel from "./ImportExportPanel";
+import { PursuitIcon } from "./icons";
 
 export default function SettingsClient() {
   const hydrated = useHydrated();
@@ -144,7 +145,7 @@ export default function SettingsClient() {
           <div className="divide-y divide-border">
             {archived.map((i) => (
               <div key={i.id} className="flex items-center gap-3 py-2.5">
-                <span className="text-lg">{i.icon}</span>
+                <PursuitIcon icon={i.icon} size={20} />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm truncate">{i.name}</div>
                   <div className="text-xs text-dim">

@@ -79,7 +79,7 @@ export default function ManualLogForm({
         >
           {interests.map((i) => (
             <option key={i.id} value={i.id}>
-              {i.icon} {i.name}
+              {i.icon.startsWith("ayuta:") ? i.name : `${i.icon} ${i.name}`}
             </option>
           ))}
         </select>

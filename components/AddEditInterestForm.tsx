@@ -7,6 +7,7 @@ import { INTEREST_ICONS } from "@/lib/icons";
 import { INTEREST_COLORS } from "@/lib/colors";
 import { createInterest, updateInterest } from "@/lib/interests";
 import PathPicker from "./PathPicker";
+import { PURSUIT_ICONS, PursuitIcon } from "./icons";
 
 export default function AddEditInterestForm({
   interest,
@@ -77,18 +78,42 @@ export default function AddEditInterestForm({
         <label className="block text-sm text-muted mb-1">Icon</label>
         <div className="flex items-center gap-2 mb-2">
           <div
-            className="h-11 w-11 rounded-lg flex items-center justify-center text-2xl border border-border"
+            className="h-11 w-11 rounded-lg flex items-center justify-center border border-border"
             style={{ background: `${color}22` }}
           >
-            {icon}
+            <PursuitIcon icon={icon} size={26} />
           </div>
-          <input
-            value={icon}
-            onChange={(e) => setIcon(e.target.value.slice(0, 4) || "🎯")}
-            className="w-20 rounded-lg bg-raised border border-border px-3 py-2 text-text text-center min-h-[44px]"
-            aria-label="Custom emoji"
-          />
+          {!icon.startsWith("ayuta:") && (
+            <input
+              value={icon}
+              onChange={(e) => setIcon(e.target.value.slice(0, 4) || "🎯")}
+              className="w-20 rounded-lg bg-raised border border-border px-3 py-2 text-text text-center min-h-[44px]"
+              aria-label="Custom emoji"
+            />
+          )}
         </div>
+
+        <div className="text-[11px] text-dim mb-1.5">Ayuta icons</div>
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {PURSUIT_ICONS.map((d) => {
+            const val = `ayuta:${d.key}`;
+            return (
+              <button
+                key={d.key}
+                type="button"
+                title={d.label}
+                onClick={() => setIcon(val)}
+                className={`h-10 w-10 rounded-lg flex items-center justify-center border ${
+                  icon === val ? "border-accent bg-accent/10" : "border-border"
+                }`}
+              >
+                <d.Component size={22} />
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="text-[11px] text-dim mb-1.5">Or any emoji</div>
         <div className="flex flex-wrap gap-1.5">
           {INTEREST_ICONS.slice(0, 24).map((ic) => (
             <button

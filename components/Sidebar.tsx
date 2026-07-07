@@ -4,18 +4,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { NAV_ITEMS } from "./navItems";
+import { NAV_ICONS, AyutaMark } from "./icons";
 import { haptic } from "@/lib/feedback";
 
 export default function Sidebar() {
   const pathname = usePathname();
   return (
     <aside className="hidden md:flex md:w-56 md:flex-col md:border-r md:border-border md:sticky md:top-0 md:h-screen md:shrink-0 bg-bg2/30 px-3 py-5">
-      <Link href="/" className="px-3 mb-8 block">
-        <div className="text-2xl font-black tracking-tight">
-          <span className="gradient-text">Ayuta</span>{" "}
-          <span className="text-dim text-sm font-normal">अयुत</span>
+      <Link href="/" className="px-3 mb-8 flex items-center gap-2.5">
+        <AyutaMark size={38} />
+        <div>
+          <div className="text-2xl font-black tracking-tight">
+            <span className="gradient-text">Ayuta</span>
+          </div>
+          <div className="text-xs text-dim">time → mastery · अयुत</div>
         </div>
-        <div className="text-xs text-dim">time → mastery</div>
       </Link>
       <nav className="flex flex-col gap-1">
         {NAV_ITEMS.map((item) => {
@@ -37,7 +40,15 @@ export default function Sidebar() {
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
-              <span className="text-base relative">{item.icon}</span>
+              <span
+                className="relative"
+                style={{ color: active ? "var(--accent)" : undefined }}
+              >
+                {(() => {
+                  const Ico = NAV_ICONS[item.iconKey];
+                  return Ico ? <Ico size={20} /> : item.icon;
+                })()}
+              </span>
               <span className="relative">{item.label}</span>
             </Link>
           );

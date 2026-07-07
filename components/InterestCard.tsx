@@ -9,6 +9,7 @@ import { withAlpha } from "@/lib/colors";
 import MasteryRing from "./MasteryRing";
 import StageBadge from "./StageBadge";
 import StartTimerButton from "./StartTimerButton";
+import { PursuitIcon } from "./icons";
 
 export default function InterestCard({ summary }: { summary: InterestSummary }) {
   const { interest, totalHours, mastery, stage, next } = summary;
@@ -36,7 +37,7 @@ export default function InterestCard({ summary }: { summary: InterestSummary }) 
         className="flex items-center gap-3 relative"
       >
         <MasteryRing pct={mastery} size={64} stroke={6} color={interest.color}>
-          <span className="text-lg">{interest.icon}</span>
+          <PursuitIcon icon={interest.icon} size={22} />
         </MasteryRing>
         <div className="min-w-0 flex-1">
           <div className="font-semibold truncate">{interest.name}</div>

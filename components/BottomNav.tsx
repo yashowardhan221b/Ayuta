@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { NAV_ITEMS } from "./navItems";
+import { NAV_ICONS } from "./icons";
 import { haptic } from "@/lib/feedback";
 
 export default function BottomNav() {
@@ -35,9 +36,13 @@ export default function BottomNav() {
               <motion.span
                 animate={{ scale: active ? 1.15 : 1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 18 }}
-                className="text-lg leading-none"
+                className="leading-none"
+                style={{ color: active ? "var(--accent)" : undefined }}
               >
-                {item.icon}
+                {(() => {
+                  const Ico = NAV_ICONS[item.iconKey];
+                  return Ico ? <Ico size={22} /> : item.icon;
+                })()}
               </motion.span>
               {item.label}
             </Link>

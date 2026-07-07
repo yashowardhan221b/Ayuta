@@ -13,6 +13,7 @@ import { withAlpha } from "@/lib/colors";
 import AnimatedNumber from "./AnimatedNumber";
 import StageBadge from "./StageBadge";
 import EmptyState from "./EmptyState";
+import { PursuitIcon } from "./icons";
 
 const HOUR_MILESTONES = [
   { h: 10, label: "First 10 hours", icon: "🌱" },
@@ -143,7 +144,7 @@ export default function ProfileClient() {
           <div className="space-y-2.5">
             {activePursuits.map(({ i, hours }) => (
               <Link key={i.id} href={`/interests/${i.id}`} className="flex items-center gap-2.5">
-                <span className="text-lg">{i.icon}</span>
+                <PursuitIcon icon={i.icon} size={20} />
                 <span className="flex-1 truncate text-sm">{i.name}</span>
                 <StageBadge stage={getStage(hours, i.targetHours)} size="sm" />
               </Link>

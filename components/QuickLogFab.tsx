@@ -70,7 +70,7 @@ export default function QuickLogFab() {
         >
           {interests.map((i) => (
             <option key={i.id} value={i.id} className="bg-surface-solid">
-              {i.icon} {i.name}
+              {i.icon.startsWith("ayuta:") ? i.name : `${i.icon} ${i.name}`}
             </option>
           ))}
         </select>
